@@ -1,0 +1,28 @@
+{
+  "name": "sr_test_framework",
+  "version": "1.0.0",
+  "description": "testing framework used when testing typescript code",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "/lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lae0901/sr_test_framework.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lae0901/sr_test_framework/issues"
+  },
+  "homepage": "https://github.com/lae0901/sr_test_framework#readme",
+  "devDependencies": {
+    "@types/node": "^14.0.14"
+  }
+}
