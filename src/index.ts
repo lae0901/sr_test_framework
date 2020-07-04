@@ -4,8 +4,13 @@ type PassFail = 'pass' | 'fail';
 
 export interface iTestResultItem
 {
-  passFail: PassFail,
-  text: string,
+  // passFail and text are deprecated.  use simpler passText and failText.
+  passFail?: PassFail,
+  text?: string,
+
+  passText?: string,
+  failText?: string,
+
   method?: string  // name of function being tested.
 }
 
@@ -22,6 +27,8 @@ export function testResults_append(results_arr: iTestResultItem[],
   {
     item = { passFail: 'pass', text: passText };
   }
+  item.passText = passText;
+  item.failText = failText;
   results_arr.push(item);
 }
 
