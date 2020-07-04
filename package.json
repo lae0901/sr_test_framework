@@ -1,12 +1,12 @@
 {
   "name": "sr_test_framework",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "testing framework used when testing typescript code",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./lib/tester.js"
   },
   "files": [
     "/lib"

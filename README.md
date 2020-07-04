@@ -1,5 +1,26 @@
 # typescript testing framework
 
+## interfaces
+* iTestResultItem
+```
+export interface iTestResultItem
+{
+  // passFail and text are deprecated.  use simpler passText and failText.
+  passFail?: PassFail,
+  text?: string,
+
+  passText?: string,
+  failText?: string,
+
+  method?: string  // name of function being tested.
+}
+```
+
+## tester methods
+* testResults_consoleLog( iTestResultItem[] )
+* testResults_append( iTestResultItem[], passText, failText, method )
+* iTestResultItem[] = testResults_new( )
+
 ## publish instructions
 * increment version number in package.json
 * npm run build
