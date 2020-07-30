@@ -21,6 +21,7 @@ export function testResults_append(results_arr: iTestResultItem[],
   let item: iTestResultItem = {} ;
   item.passText = passText;
   item.failText = failText;
+  item.method = method ;
   testResultItem_ensurePassFail(item) ;
   results_arr.push(item);
 }
