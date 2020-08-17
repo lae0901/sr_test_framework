@@ -11,17 +11,31 @@ export interface iTestResultItem
   passText?: string,
   failText?: string,
 
-  method?: string  // name of function being tested.
+  method?: string ; // name of function being tested.
+  aspect?: string ; // aspect of the method being tested.
 }
 
 // ----------------------------- testResults_append -----------------------------
 export function testResults_append(results_arr: iTestResultItem[],
-  passText: string, failText: string, method: string = '')
+  passText: string, failText: string, 
+  method?: string | {method:string, aspect:string})
 {
   let item: iTestResultItem = {} ;
   item.passText = passText;
   item.failText = failText;
-  item.method = method ;
+  
+  // name of method being tested. aspect of the method.
+  item.aspect = '' ;
+  if ( !method )
+    item.method = '' ;
+  else if ( typeof method == 'string')
+    item.method = method ;
+  else
+  {
+    item.method = method.method ;
+    item.aspect = method.aspect ;
+  }
+
   testResultItem_ensurePassFail(item) ;
   results_arr.push(item);
 }
@@ -35,7 +49,8 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
   {
     testResultItem_ensurePassFail(item) ;
     const method = (item.method) ? item.method + ' ' : '';
-    console.log(`${item.passFail} ${method}${item.text}`);
+    const aspectText = item.aspect ? ` ${item.aspect} ` : '' ;
+    console.log(`${item.passFail} ${method}${aspectText}${item.text}`);
 
     // update count of total passed and total failed.
     if ( item.passFail == 'fail')

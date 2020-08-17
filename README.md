@@ -19,6 +19,7 @@ export interface iTestResultItem
 ## tester methods
 * testResults_consoleLog( iTestResultItem[] )
 * testResults_append( iTestResultItem[], passText, failText, method )
+  * method argument can be object with method and aspect properties.
 * iTestResultItem[] = testResults_new( )
 
 ## publish instructions

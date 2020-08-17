@@ -33,5 +33,10 @@ async function primitive_file_test()
   method = 'primitive_file_test' ;
   testResults_append( results, `get temp dir ${tempTestDir}`, errmsg, method ) ;
 
+  {
+    const aspect = 'delete temp dir';
+    testResults_append( results, `temp dir ${tempTestDir}`, errmsg, {method,aspect});
+  }
+
   return { results };
 }
