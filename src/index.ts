@@ -2,6 +2,7 @@
 
 type PassFail = 'pass' | 'fail';
 
+// -------------------------------- iTestResultItem --------------------------------
 export interface iTestResultItem
 {
   // passFail and text are deprecated.  use simpler passText and failText.
@@ -11,34 +12,97 @@ export interface iTestResultItem
   passText?: string,
   failText?: string,
 
+  // values that follow, if specified, are used to construct passText and failText.
   method?: string ; // name of function being tested.
   aspect?: string ; // aspect of the method being tested.
+
+  desc?: string ;   // description of the test.
+  expected?: string ;  // expected result of test
+  testResult?: string ;  // actual result of test
+  didFail?: boolean;     // test failed. true or false.
+}
+
+// -------------------------------- iTestResultComponents --------------------------------
+// values that are used to construct passText and failText.
+export interface iTestResultComponents
+{
+  method?: string; // name of function being tested.
+  aspect?: string; // aspect of the method being tested.
+
+  desc?: string;   // description of the test.
+  expected?: string;  // expected result of test
+  testResult?: string;  // actual result of test
+  didFail?: boolean;     // test failed. true or false.
 }
 
 // ----------------------------- testResults_append -----------------------------
 export function testResults_append(results_arr: iTestResultItem[],
-  passText: string, failText: string, 
+  components: iTestResultComponents | string, failText: string, 
   method?: string | {method:string, aspect:string})
 {
   let item: iTestResultItem = {} ;
-  item.passText = passText;
-  item.failText = failText;
-  
-  // name of method being tested. aspect of the method.
-  item.aspect = '' ;
-  if ( !method )
-    item.method = '' ;
-  else if ( typeof method == 'string')
-    item.method = method ;
+
+  if ( typeof components == 'string')
+  {
+    item.passText = components;
+    item.failText = failText;
+    
+    // name of method being tested. aspect of the method.
+    item.aspect = '' ;
+    if ( !method )
+      item.method = '' ;
+    else if ( typeof method == 'string')
+      item.method = method ;
+    else
+    {
+      item.method = method.method ;
+      item.aspect = method.aspect ;
+    }
+
+    testResultItem_ensurePassFail(item) ;
+    results_arr.push(item);
+  }
   else
   {
-    item.method = method.method ;
-    item.aspect = method.aspect ;
+    testResults_appendFromComponents( results_arr, components ) ;
+  }
+}
+
+// ------------------------ testResults_appendFromComponents ---------------------
+function testResults_appendFromComponents(results_arr: iTestResultItem[],
+  components: iTestResultComponents )
+{
+  let item: iTestResultItem = {};
+  item.method = components.method || '' ;
+  item.aspect = components.aspect || '' ;
+  item.desc = components.desc || '' ;
+  item.expected = components.expected ;
+  item.testResult = components.testResult;
+  item.didFail = components.didFail || false ;
+
+  let passText = '' ;
+  let failText = '' ;
+  let text = '';
+
+  item.passText = passText;
+  item.failText = failText;
+
+  // name of method being tested. aspect of the method.
+  item.aspect = '';
+  if (!method)
+    item.method = '';
+  else if (typeof method == 'string')
+    item.method = method;
+  else
+  {
+    item.method = method.method;
+    item.aspect = method.aspect;
   }
 
-  testResultItem_ensurePassFail(item) ;
+  testResultItem_ensurePassFail(item);
   results_arr.push(item);
 }
+
 
 // --------------------------- testResults_consoleLog ---------------------------
 export function testResults_consoleLog(results_arr: iTestResultItem[])
