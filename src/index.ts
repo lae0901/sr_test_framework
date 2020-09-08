@@ -17,8 +17,8 @@ export interface iTestResultItem
   aspect?: string ; // aspect of the method being tested.
 
   desc?: string ;   // description of the test.
-  expected?: string ;  // expected result of test
-  testResult?: string ;  // actual result of test
+  expected?: any ;  // expected result of test
+  testResult?: any ;  // actual result of test
   didFail?: boolean;     // test failed. true or false.
 }
 
@@ -30,8 +30,8 @@ export interface iTestResultComponents
   aspect?: string; // aspect of the method being tested.
 
   desc?: string;   // description of the test.
-  expected?: string;  // expected result of test
-  testResult?: string;  // actual result of test
+  expected?: any;  // expected result of test
+  testResult?: any;  // actual result of test
   didFail?: boolean;     // test failed. true or false.
 }
 
