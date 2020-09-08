@@ -47,4 +47,16 @@ async function primitive_file_test( results: iTestResultItem[] )
 function components_test( results: iTestResultItem[] )
 {
   testResults_append( results, { expected:'25', method:'framework', aspect:'startup', desc:'debug framework' })
+
+  {
+    const dummy = testResults_new();
+    testResults_append( dummy, { expected:'25', testResult:'35', method:'framework', aspect:'didFailFlag', desc:'set did fail flag' })
+    const result_item = dummy[0] ;
+    const expected = 'Y' ;
+    const testResult = result_item.didFail ? 'Y' : 'N' ;
+    const method = 'testResults' ;
+    const desc = 'auto set from expected and testResult' ;
+    const aspect = 'expected';
+    testResults_append(results, { expected, testResult, method, aspect, desc });
+  }
 }

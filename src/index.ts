@@ -81,6 +81,12 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.testResult = components.testResult;
   item.didFail = components.didFail || false ;
 
+  // set didFail flag based on test result.
+  if ( item.expected && item.testResult )
+  {
+    item.didFail = !(item.expected == item.testResult ) ;
+  }
+
   if ( item.didFail )
     item.passFail = 'fail' ;
   else
@@ -97,8 +103,10 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
   for (const item of results_arr)
   {
     testResultItem_ensurePassFail(item) ;
-    const method = (item.method) ? item.method + ' ' : '';
-    const aspectText = item.aspect ? ` ${item.aspect} ` : '' ;
+    let method = (item.method) ? item.method + ' ' : '';
+    const aspectText = item.aspect ? ` ${item.aspect}. ` : '' ;
+    if ( method && !aspectText )
+      method = method.trimEnd( ) + '. ' ;
 
     let expectedText = '' ;
     if ( item.didFail && item.expected )
