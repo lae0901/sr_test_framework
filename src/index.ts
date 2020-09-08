@@ -37,7 +37,7 @@ export interface iTestResultComponents
 
 // ----------------------------- testResults_append -----------------------------
 export function testResults_append(results_arr: iTestResultItem[],
-  components: iTestResultComponents | string, failText: string, 
+  components: iTestResultComponents | string, failText?: string, 
   method?: string | {method:string, aspect:string})
 {
   let item: iTestResultItem = {} ;
@@ -45,7 +45,7 @@ export function testResults_append(results_arr: iTestResultItem[],
   if ( typeof components == 'string')
   {
     item.passText = components;
-    item.failText = failText;
+    item.failText = failText || '' ;
     
     // name of method being tested. aspect of the method.
     item.aspect = '' ;
@@ -76,33 +76,18 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.method = components.method || '' ;
   item.aspect = components.aspect || '' ;
   item.desc = components.desc || '' ;
+  item.text = item.desc ;
   item.expected = components.expected ;
   item.testResult = components.testResult;
   item.didFail = components.didFail || false ;
 
-  let passText = '' ;
-  let failText = '' ;
-  let text = '';
-
-  item.passText = passText;
-  item.failText = failText;
-
-  // name of method being tested. aspect of the method.
-  item.aspect = '';
-  if (!method)
-    item.method = '';
-  else if (typeof method == 'string')
-    item.method = method;
+  if ( item.didFail )
+    item.passFail = 'fail' ;
   else
-  {
-    item.method = method.method;
-    item.aspect = method.aspect;
-  }
+    item.passFail = 'pass' ;
 
-  testResultItem_ensurePassFail(item);
   results_arr.push(item);
 }
-
 
 // --------------------------- testResults_consoleLog ---------------------------
 export function testResults_consoleLog(results_arr: iTestResultItem[])
@@ -114,7 +99,14 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
     testResultItem_ensurePassFail(item) ;
     const method = (item.method) ? item.method + ' ' : '';
     const aspectText = item.aspect ? ` ${item.aspect} ` : '' ;
-    console.log(`${item.passFail} ${method}${aspectText}${item.text}`);
+
+    let expectedText = '' ;
+    if ( item.didFail && item.expected )
+    {
+      expectedText = ` Result:${item.testResult} Expected:${item.expected}`;
+    }
+
+    console.log(`${item.passFail} ${method}${aspectText}${item.text}.${expectedText}`);
 
     // update count of total passed and total failed.
     if ( item.passFail == 'fail')
