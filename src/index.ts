@@ -82,7 +82,7 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.didFail = components.didFail || false ;
 
   // set didFail flag based on test result.
-  if ( item.expected && item.testResult )
+  if ( item.expected != undefined && item.testResult != undefined )
   {
     item.didFail = !(item.expected == item.testResult ) ;
   }
