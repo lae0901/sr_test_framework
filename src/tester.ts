@@ -22,6 +22,8 @@ async function async_main( )
 
   components_test( results ) ;
 
+  array_test( results ) ;
+
   testResults_consoleLog(results);
 }
 
@@ -58,5 +60,60 @@ function components_test( results: iTestResultItem[] )
     const desc = 'auto set from expected and testResult' ;
     const aspect = 'expected';
     testResults_append(results, { expected, testResult, method, aspect, desc });
+  }
+}
+
+// -------------------------------- array_test --------------------------------
+// test where expected and testResult values are stored in arrays.
+function array_test(results: iTestResultItem[])
+{
+  const dummy = testResults_new();
+
+  // run test against arrays that should pass.
+  {
+    const expected = ['national', 25, 'framework'];
+    const testResult = ['national', 25, 'framework'];
+    const method = 'array_test' ;
+    testResults_append( dummy,
+      {
+        expected, method, aspect: 'pass result',
+        desc: 'test that passes'
+      });
+    }
+    
+  // read back from testResults array. 
+  {
+    const expected = 'pass' ;
+    const category = 'array' ;
+    const testResult = dummy[0].passFail;
+    const method = 'testResults_append' ;
+    testResults_append(results, 
+            { category, expected, method, aspect: 'pass result', 
+              desc: 'test that array test passes' });
+  }
+
+  // run test against arrays that should fail.
+  {
+    const expected = ['national', 25, 'framework'];
+    const testResult = ['national', 25, true];
+    const method = 'array_test';
+    testResults_append(dummy,
+      {
+        expected, method, aspect: 'fail result',
+        desc: 'test that should fail'
+      });
+  }
+
+  // read back from testResults array. 
+  {
+    const expected = 'fail';
+    const category = 'array';
+    const testResult = dummy[1].passFail;
+    const method = 'testResults_append';
+    testResults_append(results,
+    {
+      category, expected, method, aspect: 'fail result',
+      desc: 'test that array test fails'
+    });
   }
 }

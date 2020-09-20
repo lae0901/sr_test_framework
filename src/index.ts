@@ -1,5 +1,7 @@
 // ./sr_test_framework/src/index.ts
 
+import { array_compare } from 'sr_core_ts';
+
 type PassFail = 'pass' | 'fail';
 
 // -------------------------------- iTestResultItem --------------------------------
@@ -97,7 +99,22 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   // set didFail flag based on test result.
   if ( item.expected != undefined && item.testResult != undefined )
   {
-    item.didFail = !(item.expected == item.testResult ) ;
+    // expected and testResult are arrays. compare arrays for equality.
+    if ( Array.isArray(item.expected) && Array.isArray(item.testResult))
+    {
+      item.didFail = !(array_compare(item.expected, item.testResult) == 0);
+    }
+
+    // expected and testResult are objects. compare each property.
+    else if ( typeof item.expected == 'object' && typeof item.testResult == 'object')
+    {
+      throw 'object compare not yet supported' ;
+    }
+
+    else
+    {
+      item.didFail = !(item.expected == item.testResult ) ;
+    }
   }
 
   if ( item.didFail )
@@ -117,7 +134,7 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
   {
     testResultItem_ensurePassFail(item) ;
     let method = (item.method) ? item.method + ' ' : '';
-    const categoryText = item.category ? ` ${item.category}` : '' ;
+    const categoryText = item.category ? `${item.category} ` : '' ;
     const aspectText = item.aspect ? ` ${item.aspect}. ` : '' ;
     if ( method && !aspectText )
       method = method.trimEnd( ) + '. ' ;
