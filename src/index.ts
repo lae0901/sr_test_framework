@@ -20,6 +20,11 @@ export interface iTestResultItem
   expected?: any ;  // expected result of test
   testResult?: any ;  // actual result of test
   didFail?: boolean;     // test failed. true or false.
+
+  category?: string;  // category of the test. tests are grouped by category and summarized by category.
+
+  startTime?: Date;   // when test was run. 
+  endTime?: Date;     // time test ended. duration = endTime - startTime
 }
 
 // -------------------------------- iTestResultComponents --------------------------------
@@ -33,6 +38,11 @@ export interface iTestResultComponents
   expected?: any;  // expected result of test
   testResult?: any;  // actual result of test
   didFail?: boolean;     // test failed. true or false.
+
+  category?: string;  // category of the test. tests are grouped by category and summarized by category.
+
+  startTime?: Date;   // when test was run. 
+  endTime?: Date;     // time test ended. duration = endTime - startTime
 }
 
 // ----------------------------- testResults_append -----------------------------
@@ -80,6 +90,9 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.expected = components.expected ;
   item.testResult = components.testResult;
   item.didFail = components.didFail || false ;
+  item.category = components.category || '' ;
+  item.startTime = components.startTime || new Date( ) ;
+  item.endTime = components.endTime || new Date( ) ;
 
   // set didFail flag based on test result.
   if ( item.expected != undefined && item.testResult != undefined )
@@ -104,6 +117,7 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
   {
     testResultItem_ensurePassFail(item) ;
     let method = (item.method) ? item.method + ' ' : '';
+    const categoryText = item.category ? ` ${item.category}` : '' ;
     const aspectText = item.aspect ? ` ${item.aspect}. ` : '' ;
     if ( method && !aspectText )
       method = method.trimEnd( ) + '. ' ;
@@ -114,7 +128,7 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
       expectedText = ` Result:${item.testResult} Expected:${item.expected}`;
     }
 
-    console.log(`${item.passFail} ${method}${aspectText}${item.text}.${expectedText}`);
+    console.log(`${item.passFail} ${categoryText}${method}${aspectText}${item.text}.${expectedText}`);
 
     // update count of total passed and total failed.
     if ( item.passFail == 'fail')
