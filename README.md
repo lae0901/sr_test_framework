@@ -20,7 +20,7 @@ export interface iTestResultItem
 * testResults_consoleLog( iTestResultItem[] )
 * testResults_append( iTestResultItem[], passText, failText, method )
   * method argument can be object with method and aspect properties.
-* testResults_append( results, { expected, testResult, method, aspect, desc, didFail })
+* testResults_append( results, { expected, results, method, aspect, desc, didFail })
 
 * iTestResultItem[] = testResults_new( )
 

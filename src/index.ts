@@ -1,6 +1,6 @@
 // ./sr_test_framework/src/index.ts
 
-import { array_compare } from 'sr_core_ts';
+import { array_compare, object_compareEqual } from 'sr_core_ts';
 
 type PassFail = 'pass' | 'fail';
 
@@ -20,7 +20,7 @@ export interface iTestResultItem
 
   desc?: string ;   // description of the test.
   expected?: any ;  // expected result of test
-  testResult?: any ;  // actual result of test
+  results?: any ;  // actual result of test
   didFail?: boolean;     // test failed. true or false.
 
   category?: string;  // category of the test. tests are grouped by category and summarized by category.
@@ -39,6 +39,7 @@ export interface iTestResultComponents
   desc?: string;   // description of the test.
   expected?: any;  // expected result of test
   testResult?: any;  // actual result of test
+  results?: any;  // actual result of test
   didFail?: boolean;     // test failed. true or false.
 
   category?: string;  // category of the test. tests are grouped by category and summarized by category.
@@ -90,30 +91,34 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.desc = components.desc || '' ;
   item.text = item.desc ;
   item.expected = components.expected ;
-  item.testResult = components.testResult;
+
+  item.results = components.testResult;
+  if ( components.results != undefined )
+    item.results = components.results ;
+
   item.didFail = components.didFail || false ;
   item.category = components.category || '' ;
   item.startTime = components.startTime || new Date( ) ;
   item.endTime = components.endTime || new Date( ) ;
 
   // set didFail flag based on test result.
-  if ( item.expected != undefined && item.testResult != undefined )
+  if ( item.expected != undefined && item.results != undefined )
   {
-    // expected and testResult are arrays. compare arrays for equality.
-    if ( Array.isArray(item.expected) && Array.isArray(item.testResult))
+    // expected and results are arrays. compare arrays for equality.
+    if ( Array.isArray(item.expected) && Array.isArray(item.results))
     {
-      item.didFail = !(array_compare(item.expected, item.testResult) == 0);
+      item.didFail = !(array_compare(item.expected, item.results) == 0);
     }
 
-    // expected and testResult are objects. compare each property.
-    else if ( typeof item.expected == 'object' && typeof item.testResult == 'object')
+    // expected and results are objects. compare each property.
+    else if ( typeof item.expected == 'object' && typeof item.results == 'object')
     {
-      throw 'object compare not yet supported' ;
+      item.didFail = !(object_compareEqual(item.expected, item.results));
     }
 
     else
     {
-      item.didFail = !(item.expected == item.testResult ) ;
+      item.didFail = !(item.expected == item.results ) ;
     }
   }
 
@@ -142,7 +147,7 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
     let expectedText = '' ;
     if ( item.didFail && item.expected )
     {
-      expectedText = ` Result:${item.testResult} Expected:${item.expected}`;
+      expectedText = ` Result:${item.results} Expected:${item.expected}`;
     }
 
     console.log(`${item.passFail} ${categoryText}${method}${aspectText}${item.text}.${expectedText}`);
