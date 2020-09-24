@@ -5,14 +5,12 @@
 ```
 export interface iTestResultItem
 {
-  // passFail and text are deprecated.  use simpler passText and failText.
-  passFail?: PassFail,
-  text?: string,
-
-  passText?: string,
-  failText?: string,
-
-  method?: string  // name of function being tested.
+  expected?: string,
+  actual?: string,
+  category?: string,
+  method?: string,
+  aspect?: string,
+  desc?: string
 }
 ```
 
