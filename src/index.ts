@@ -1,6 +1,6 @@
 // ./sr_test_framework/src/index.ts
 
-import { array_compareEqual, object_compareEqual } from 'sr_core_ts';
+import { any_toString, array_compareEqual, object_compareEqual } from 'sr_core_ts';
 
 type PassFail = 'pass' | 'fail';
 
@@ -147,7 +147,7 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
     let expectedText = '' ;
     if ( item.didFail && item.expected )
     {
-      expectedText = ` Result:${item.actual} Expected:${item.expected}`;
+      expectedText = ` Result:${any_toString(item.actual)} Expected:${any_toString(item.expected)}`;
     }
 
     console.log(`${item.passFail} ${categoryText}${method}${aspectText}${item.text}.${expectedText}`);
