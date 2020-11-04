@@ -1,7 +1,7 @@
 import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
-import {testResults_append, testResults_consoleLog, testResults_new, iTestResultItem } from './index';
+import {testResults_append, testResults_consoleLog, testResults_new, iTestResultItem, testResultItem_resultMessage } from './index';
 
 const folderPath = '/c:/github/tester';
 const fileName = 'app.vue';
@@ -24,6 +24,8 @@ async function async_main( )
 
   array_test( results ) ;
   object_test( results ) ;
+
+  errmsg_test( results ) ;
 
   testResults_consoleLog(results);
 }
@@ -174,4 +176,30 @@ function object_test(results: iTestResultItem[])
         desc: 'test that object test fails'
       });
   }
+}
+
+// -------------------------------- errmsg_test --------------------------------
+// test where expected and actual values are stored in objects.
+function errmsg_test(results: iTestResultItem[])
+{
+  const dummy = testResults_new();
+
+  // run test the returns an errmsg.
+  {
+    const method = 'oximeter' ;
+    const errmsg = 'failed to read' ;
+    testResults_append( dummy, {method, errmsg});
+  }
+
+  // write test results as an array of test result messages.
+  const actual = dummy.map((item) =>
+  {
+    const message = testResultItem_resultMessage(item) ;
+    return message ;
+  });
+
+  const method = 'testResults_append' ;
+  const aspect = 'test with errmsg' ;
+  const expected = ['fail oximeter. failed to read .'] ;
+  testResults_append( results, { method, actual, expected, aspect });
 }

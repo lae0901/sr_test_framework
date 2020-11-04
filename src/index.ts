@@ -27,6 +27,8 @@ export interface iTestResultItem
 
   startTime?: Date;   // when test was run. 
   endTime?: Date;     // time test ended. duration = endTime - startTime
+
+  errmsg?: string;    // errmsg of error that cause test to fail.
 }
 
 // -------------------------------- iTestResultComponents --------------------------------
@@ -46,6 +48,8 @@ export interface iTestResultComponents
 
   startTime?: Date;   // when test was run. 
   endTime?: Date;     // time test ended. duration = endTime - startTime
+
+  errmsg?: string;    // errmsg of error that cause test to fail.
 }
 
 // ----------------------------- testResults_append -----------------------------
@@ -91,6 +95,7 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.desc = components.desc || '' ;
   item.text = item.desc ;
   item.expected = components.expected ;
+  item.errmsg = components.errmsg || '' ;
 
   item.actual = components.testResult;
   if ( components.actual != undefined )
@@ -101,8 +106,14 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
   item.startTime = components.startTime || new Date( ) ;
   item.endTime = components.endTime || new Date( ) ;
 
+  // an errmsg of an error.  test did fail.
+  if ( !item.didFail && item.errmsg )
+  {
+    item.didFail = true ;
+  }
+
   // set didFail flag based on test result.
-  if ( item.expected != undefined && item.actual != undefined )
+  if ( !item.didFail && item.expected != undefined && item.actual != undefined )
   {
     // expected and actual are arrays. compare arrays for equality.
     if ( Array.isArray(item.expected) && Array.isArray(item.actual))
@@ -137,20 +148,24 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
   let failCount = 0 ;
   for (const item of results_arr)
   {
-    testResultItem_ensurePassFail(item) ;
-    let method = (item.method) ? item.method + ' ' : '';
-    const categoryText = item.category ? `${item.category} ` : '' ;
-    const aspectText = item.aspect ? ` ${item.aspect}. ` : '' ;
-    if ( method && !aspectText )
-      method = method.trimEnd( ) + '. ' ;
+    const message = testResultItem_resultMessage(item) ;
 
-    let expectedText = '' ;
-    if ( item.didFail && item.expected )
-    {
-      expectedText = ` Result:${any_toString(item.actual)} Expected:${any_toString(item.expected)}`;
-    }
+    // testResultItem_ensurePassFail(item) ;
+    // let method = (item.method) ? item.method + ' ' : '';
+    // const categoryText = item.category ? `${item.category} ` : '' ;
+    // const aspectText = item.aspect ? ` ${item.aspect}. ` : '' ;
+    // if ( method && !aspectText )
+    //   method = method.trimEnd( ) + '. ' ;
 
-    console.log(`${item.passFail} ${categoryText}${method}${aspectText}${item.text}.${expectedText}`);
+    // let expectedText = '' ;
+    // if ( item.didFail && item.expected )
+    // {
+    //   expectedText = ` Result:${any_toString(item.actual)} Expected:${any_toString(item.expected)}`;
+    // }
+
+    // const errmsg = item.errmsg ? item.errmsg.trimEnd() + ' ' : '' ;
+    // console.log(`${item.passFail} ${categoryText}${method}${aspectText}${errmsg}${item.text}.${expectedText}`);
+    console.log(`${message}`);
 
     // update count of total passed and total failed.
     if ( item.passFail == 'fail')
@@ -189,4 +204,25 @@ function testResultItem_ensurePassFail( item: iTestResultItem )
       item.text = item.passText;
     }
   }
+}
+
+// --------------------------- testResultItem_resultMessage -----------------------
+export function testResultItem_resultMessage( item: iTestResultItem )
+{
+  testResultItem_ensurePassFail(item);
+  let method = (item.method) ? item.method + ' ' : '';
+  const categoryText = item.category ? `${item.category} ` : '';
+  const aspectText = item.aspect ? ` ${item.aspect}. ` : '';
+  if (method && !aspectText)
+    method = method.trimEnd() + '. ';
+
+  let expectedText = '';
+  if (item.didFail && item.expected)
+  {
+    expectedText = ` Result:${any_toString(item.actual)} Expected:${any_toString(item.expected)}`;
+  }
+
+  const errmsg = item.errmsg ? item.errmsg.trimEnd() + ' ' : '';
+  const message = `${item.passFail} ${categoryText}${method}${aspectText}${errmsg}${item.text}.${expectedText}`;
+  return message ;
 }
