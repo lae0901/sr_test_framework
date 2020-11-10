@@ -27,7 +27,7 @@ async function async_main( )
 
   errmsg_test( results ) ;
 
-  testResults_consoleLog(results);
+  await testResults_consoleLog(results);
 }
 
 // ---------------------------------- primitive_file_test ----------------------------------

@@ -1,6 +1,6 @@
 // ./sr_test_framework/src/index.ts
 
-import { any_toString, array_compareEqual, object_compareEqual } from 'sr_core_ts';
+import { any_toString, array_compareEqual, object_compareEqual, openTextLinesInBrowser } from 'sr_core_ts';
 
 type PassFail = 'pass' | 'fail';
 
@@ -142,30 +142,18 @@ function testResults_appendFromComponents(results_arr: iTestResultItem[],
 }
 
 // --------------------------- testResults_consoleLog ---------------------------
-export function testResults_consoleLog(results_arr: iTestResultItem[])
+export async function testResults_consoleLog(results_arr: iTestResultItem[])
 {
   let passCount = 0 ;
   let failCount = 0 ;
+
+  let reportLines: string[] = [] ;
+
   for (const item of results_arr)
   {
     const message = testResultItem_resultMessage(item) ;
-
-    // testResultItem_ensurePassFail(item) ;
-    // let method = (item.method) ? item.method + ' ' : '';
-    // const categoryText = item.category ? `${item.category} ` : '' ;
-    // const aspectText = item.aspect ? ` ${item.aspect}. ` : '' ;
-    // if ( method && !aspectText )
-    //   method = method.trimEnd( ) + '. ' ;
-
-    // let expectedText = '' ;
-    // if ( item.didFail && item.expected )
-    // {
-    //   expectedText = ` Result:${any_toString(item.actual)} Expected:${any_toString(item.expected)}`;
-    // }
-
-    // const errmsg = item.errmsg ? item.errmsg.trimEnd() + ' ' : '' ;
-    // console.log(`${item.passFail} ${categoryText}${method}${aspectText}${errmsg}${item.text}.${expectedText}`);
     console.log(`${message}`);
+    reportLines.push( message ) ;
 
     // update count of total passed and total failed.
     if ( item.passFail == 'fail')
@@ -175,10 +163,18 @@ export function testResults_consoleLog(results_arr: iTestResultItem[])
   }
 
   // write out pass/fail summary
+  let summaryLine = '' ;
   if ( failCount > 0 )
-    console.log(`test summary. ${failCount} failed. ${passCount} passed.`);
+  {
+    summaryLine = `test summary. ${failCount} failed. ${passCount} passed.`;
+  }
   else if ( passCount > 0)
-    console.log(`test summary. All passed. ${passCount} tests passed.`);
+    summaryLine = `test summary. All passed. ${passCount} tests passed.`;
+
+  console.log( summaryLine ) ;
+  reportLines.push( summaryLine ) ;
+
+  await openTextLinesInBrowser( reportLines.join('\n'), 'test results', false ) ;
 }
 
 // ------------------------------- testResults_new -------------------------------
