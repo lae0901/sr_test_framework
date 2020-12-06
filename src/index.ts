@@ -217,8 +217,12 @@ export function testResultItem_resultMessage( item: iTestResultItem )
   {
     expectedText = ` Result:${any_toString(item.actual)} Expected:${any_toString(item.expected)}`;
   }
+  else if ( !item.didFail && item.expected )
+  {
+    expectedText = `correct result: ${any_toString(item.expected)}`;
+  }
 
   const errmsg = item.errmsg ? item.errmsg.trimEnd() + ' ' : '';
-  const message = `${item.passFail} ${categoryText}${method}${aspectText}${errmsg}${item.text}.${expectedText}`;
+  const message = `${item.passFail} ${categoryText}${method}${aspectText}${errmsg}${expectedText}`;
   return message ;
 }

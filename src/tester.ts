@@ -26,8 +26,23 @@ async function async_main( )
   object_test( results ) ;
 
   errmsg_test( results ) ;
+  resultItem_test( results ) ;
 
   await testResults_consoleLog(results);
+}
+
+function resultItem_test( results: iTestResultItem[] )
+{
+  {
+    const dummy = testResults_new();
+    testResults_append( dummy, { expected:'35', actual:'35', method:'framework', })
+    const result_item = dummy[0] ;
+    const actual = testResultItem_resultMessage(result_item) ;
+    const expected = 'pass framework. correct result: 35' ;
+    const method = 'testResultItem_resultMessage' ;
+    const aspect = 'show expected value when test passes.';
+    testResults_append(results, { expected, actual, method, aspect });
+  }
 }
 
 // ---------------------------------- primitive_file_test ----------------------------------
