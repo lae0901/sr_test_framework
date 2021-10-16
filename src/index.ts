@@ -86,8 +86,9 @@ export function testResults_append(results_arr: iTestResultItem[],
 }
 
 // ------------------------ testResults_appendFromComponents ---------------------
-function testResults_appendFromComponents(results_arr: iTestResultItem[],
-  components: iTestResultComponents )
+function testResults_appendFromComponents(
+                      results_arr: iTestResultItem[],
+                      components: iTestResultComponents )
 {
   let item: iTestResultItem = {};
   item.method = components.method || '' ;
@@ -198,6 +199,17 @@ function testResultItem_ensurePassFail( item: iTestResultItem )
     {
       item.passFail = 'pass';
       item.text = item.passText;
+    }
+    else 
+    {
+      const actualText = any_toString(item.actual);
+      const expectedText = any_toString(item.expected);
+      if ( actualText == expectedText )
+      {
+        item.passFail = 'pass' ;
+      }
+      else 
+        item.passFail = 'fail' ;
     }
   }
 }

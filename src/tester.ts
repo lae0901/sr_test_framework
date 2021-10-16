@@ -202,7 +202,7 @@ function errmsg_test(results: iTestResultItem[])
   // run test the returns an errmsg.
   {
     const method = 'oximeter' ;
-    const errmsg = 'failed to read' ;
+    const errmsg = 'failed to read.' ;
     testResults_append( dummy, {method, errmsg});
   }
 
@@ -210,11 +210,11 @@ function errmsg_test(results: iTestResultItem[])
   const actual = dummy.map((item) =>
   {
     const message = testResultItem_resultMessage(item) ;
-    return message ;
+    return message.trimRight( ) ;
   });
 
   const method = 'testResults_append' ;
   const aspect = 'test with errmsg' ;
-  const expected = ['fail oximeter. failed to read .'] ;
+  const expected = ['fail oximeter. failed to read.'] ;
   testResults_append( results, { method, actual, expected, aspect });
 }
