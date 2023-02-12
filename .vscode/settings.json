@@ -1,0 +1,17 @@
+{
+  "editor.fontSize": 15,
+  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#ffe600",
+    "titleBar.activeForeground": "#420872"
+  },
+  "window.title": "SR_TEST_FRAMEWORK${separator}${dirty}${activeEditorMedium}${separator}${rootPath}${separator}${appName}",
+  "editor.formatOnPaste": true,
+  "editor.tokenColorCustomizations": {
+    "comments": "#ff8000",
+    "functions": "#50B450"
+  },
+  "emmet.includeLanguages": {
+    "php": "html"
+  }
+}

@@ -1,6 +1,7 @@
 // ./sr_test_framework/src/index.ts
 
-import { any_toString, array_compareEqual, object_compareEqual, openTextLinesInBrowser } from 'sr_core_ts';
+import { any_toString, arr_compareEqual, obj_compareEqual } from 'sr_core_ts';
+import { openTextLinesInBrowser } from '@steverichter/sr_node_core';
 
 type PassFail = 'pass' | 'fail';
 
@@ -33,6 +34,8 @@ export interface iTestResultItem
 
 // -------------------------------- iTestResultComponents --------------------------------
 // values that are used to construct passText and failText.
+// new name: iTestInput
+// remove startTime, endTime, errmsg
 export interface iTestResultComponents
 {
   method?: string; // name of function being tested.
@@ -119,13 +122,13 @@ function testResults_appendFromComponents(
     // expected and actual are arrays. compare arrays for equality.
     if ( Array.isArray(item.expected) && Array.isArray(item.actual))
     {
-      item.didFail = !(array_compareEqual(item.expected, item.actual));
+      item.didFail = !(arr_compareEqual(item.expected, item.actual));
     }
 
     // expected and actual are objects. compare each property.
     else if ( typeof item.expected == 'object' && typeof item.actual == 'object')
     {
-      item.didFail = !(object_compareEqual(item.expected, item.actual));
+      item.didFail = !(obj_compareEqual(item.expected, item.actual));
     }
 
     else

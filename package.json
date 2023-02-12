@@ -1,6 +1,6 @@
 {
   "name": "sr_test_framework",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "testing framework used when testing typescript code",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -27,6 +27,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "sr_core_ts": "^1.46.42"
+    "@steverichter/sr_node_core": "^1.0.1",
+    "sr_core_ts": "^1.46.56"
   }
 }
