@@ -1,6 +1,6 @@
 // ./sr_test_framework/src/index.ts
 
-import { any_toString, arr_compareEqual, obj_compareEqual } from 'sr_core_ts';
+import { any_toString, arr_compareEqual, obj_compareEqual, obj_propertyMatch } from 'sr_core_ts';
 import { openTextLinesInBrowser } from '@steverichter/sr_node_core';
 
 type PassFail = 'pass' | 'fail';
@@ -128,7 +128,7 @@ function testResults_appendFromComponents(
     // expected and actual are objects. compare each property.
     else if ( typeof item.expected == 'object' && typeof item.actual == 'object')
     {
-      item.didFail = !(obj_compareEqual(item.expected, item.actual));
+      item.didFail = !(obj_propertyMatch(item.expected, item.actual));
     }
 
     else
