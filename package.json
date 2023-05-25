@@ -1,8 +1,9 @@
 {
   "name": "sr_test_framework",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "testing framework used when testing typescript code",
   "main": "lib/index.js",
+  "type": "module",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
