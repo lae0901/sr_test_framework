@@ -1,2 +1,18 @@
-node_modules
-lib
+
+# Dependencies
+node_modules/
+
+# Lock files (never publish)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+lib/
+
+# Logs and temp
+npm-debug.log*
+*.log
+.tmp

@@ -1,6 +1,6 @@
 {
   "name": "sr_test_framework",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "testing framework used when testing typescript code",
   "main": "lib/index.js",
   "type": "module",
